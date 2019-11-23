@@ -4,7 +4,7 @@
 var Char = require("bs-platform/lib/js/char.js");
 var Caml_string = require("bs-platform/lib/js/caml_string.js");
 
-function reverse_string(_$staropt$star, _$staropt$star$1, s) {
+function helper(_$staropt$star, _$staropt$star$1, s) {
   while(true) {
     var $staropt$star = _$staropt$star$1;
     var $staropt$star$1 = _$staropt$star;
@@ -21,12 +21,10 @@ function reverse_string(_$staropt$star, _$staropt$star$1, s) {
   };
 }
 
-var Helpers = /* module */[/* reverse_string */reverse_string];
-
 function reverseString(s) {
-  return reverse_string(undefined, undefined, s);
+  return helper(undefined, undefined, s);
 }
 
-exports.Helpers = Helpers;
+exports.helper = helper;
 exports.reverseString = reverseString;
 /* No side effect */

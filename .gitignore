@@ -4,4 +4,8 @@ lib
 
 .idea
 
+.merlin
 
+*.bs.js
+
+.DS_Store
