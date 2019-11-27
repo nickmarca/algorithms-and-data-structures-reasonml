@@ -4,10 +4,6 @@ type canWalkResponse =
   | Yes
   | No;
 
-type walkResponse =
-  | Walked
-  | Refused;
-
 type direction =
   | Left
   | Down
@@ -15,6 +11,11 @@ type direction =
   | Up;
 
 type walk = (int, cursor, direction);
+
+type walkResponse =
+  | Walked(walk)
+  | Completed
+  | Refused;
 
 let buildWalkingLeft = (~matrix, ~lastWalk) => {
   let (value, (x, y), _) = lastWalk;
@@ -138,27 +139,30 @@ let changeDirection = (from): direction => {
   };
 };
 
+let optionToWalkResponse = (opt, matrixLength, counter): walkResponse => {
+  switch (opt) {
+  | Some(walk) => Walked(walk)
+  | None => counter < matrixLength ? Refused : Completed
+  };
+};
+
+let rec go = (~matrix, ~lastWalk: walk, ~towards: direction, ~counter: int) => {
+  let response = walkOrRefuse(~matrix, ~lastWalk, ~towards);
+
+  switch (optionToWalkResponse(response, Array.length(matrix), counter)) {
+  | Walked(latestWalk) =>
+    go(~matrix, ~lastWalk=latestWalk, ~towards, ~counter=counter + 1)
+  | Refused =>
+    go(~matrix, ~lastWalk, ~towards=changeDirection(towards), ~counter)
+  | Completed => ()
+  };
+};
+
 let run = (n: int) => {
   let matrix = Array.init(n, _ => Array.make(n, None));
   matrix[0][0] = Some(1);
 
-  let rec go = (~matrix, ~lastWalk: walk, ~towards: direction, ~counter: int) => {
-    let response = walkOrRefuse(~matrix, ~lastWalk, ~towards);
-
-    switch (response) {
-    | Some(latterWalk) =>
-      go(~matrix, ~lastWalk=latterWalk, ~towards, ~counter=counter + 1)
-    | None =>
-      if (counter < Array.length(matrix) * Array.length(matrix)) {
-        go(~matrix, ~shot, ~towards=changeDirection(towards), ~counter);
-      } else {
-        ();
-      }
-    };
-  };
-
-  go(~matrix, ~shot=(1, (0, 0), Left), ~towards=Left, ~counter=1);
-
+  go(~matrix, ~lastWalk=(1, (0, 0), Left), ~towards=Left, ~counter=1);
   Js.log(matrix);
 
   matrix;
