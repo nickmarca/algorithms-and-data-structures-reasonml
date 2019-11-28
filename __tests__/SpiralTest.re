@@ -17,8 +17,4 @@ describe("FindVowels", () => {
     Spiral.run(6);
     expect(1 + 1) |> toBe(2);
   });
-
-  test("Hi, my name is nicholas", () =>
-    expect(FindVowels.run("Hi, my name is nicholas")) |> toBe(7)
-  );
 });

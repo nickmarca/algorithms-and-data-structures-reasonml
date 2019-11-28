@@ -39,7 +39,7 @@ let buildWalkingRight = (~matrix, ~lastWalk) => {
 
 let buildWalkingUp = (~matrix, ~lastWalk) => {
   let (value, (x, y), _) = lastWalk;
-  let nextX = x + 1;
+  let nextX = x - 1;
   () => {
     let newVal = value + 1;
     matrix[nextX][y] = Some(newVal);
@@ -49,7 +49,7 @@ let buildWalkingUp = (~matrix, ~lastWalk) => {
 
 let buildWalkingDown = (~matrix, ~lastWalk) => {
   let (value, (x, y), _) = lastWalk;
-  let nextX = x - 1;
+  let nextX = x + 1;
   () => {
     let newVal = value + 1;
     matrix[nextX][y] = Some(newVal);
@@ -142,7 +142,7 @@ let changeDirection = (from): direction => {
 let optionToWalkResponse = (opt, matrixLength, counter): walkResponse => {
   switch (opt) {
   | Some(walk) => Walked(walk)
-  | None => counter < matrixLength ? Refused : Completed
+  | None => counter < matrixLength * matrixLength ? Refused : Completed
   };
 };
 
